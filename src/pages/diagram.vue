@@ -1,66 +1,3 @@
-<template>
-  <div class="diagram-container">
-    <router-link to="/">Задание 1</router-link>
-    <div class="diagram-header">
-      Круговая диаграмма
-    </div>
-    <div class="diagram-content">
-      <div class="list-container">
-        <div class="list-wrapper">
-          <div
-            v-for="(item, index) in diagramList"
-            :key="index"
-            class="list-item"
-          >
-            <div class="list-label">{{ item.label }}</div>
-            <div class="list-value">{{ item.data }}</div>
-            <div class="list-color">
-              <svg width="30" viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="10" cy="12.5" r="9" :fill="item.color" />
-              </svg>
-              <div>
-                <button class="icon-button" @click="openEditDialog(index)"><svg width="25" height="25" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M12 20H20.5M18 10L21 7L17 3L14 6M18 10L8 20H4V16L14 6M18 10L14 6" stroke="#213547" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg></button>
-                <button class="icon-button" @click="deleteItem(index)"><svg width="25" height="25" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M4 7H20" stroke="#213547" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M6 7V18C6 19.6569 7.34315 21 9 21H15C16.6569 21 18 19.6569 18 18V7" stroke="#213547" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M9 5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7H9V5Z" stroke="#213547" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg></button>
-              </div>
-            </div>
-          </div>
-          <button class="button-primary" @click="openAddDialog()">
-            Добавить сектор
-          </button>
-        </div>
-      </div>
-
-      <div class="chart-container">
-        <PieChart :chartData="chartData" :options="chartOptions" :width="400" :height="400" />
-      </div>
-        <!-- Диалог -->
-      <div v-if="dialogVisible" class="dialog-overlay" @mousedown="closeDialog()">
-        <div class="dialog" @mousedown.stop @mouseup.stop>
-          <h3>{{dialogData.header}}</h3>
-
-          <div class="form-group">
-            <input v-model="newDiagramValue.label" type="text" placeholder=" " />
-            <label>Название</label>
-          </div>
-
-          <div class="form-group">
-            <input v-model.number="newDiagramValue.data" type="number" placeholder=" " />
-            <label>Значение</label>
-          </div>
-
-          <div class="form-group-color">
-            <label>Цвет</label>
-            <input v-model="newDiagramValue.color" type="color" />
-          </div>
-
-          <div class="dialog-actions">
-            <button class="button-primary" @click="submitSector">{{dialogData.buttonText}}</button>
-          </div>
-        </div>
-      </div> 
-    </div>
-  </div>
-</template>
 
 <script setup lang="ts">
 import { Chart, registerables } from "chart.js";
@@ -130,6 +67,69 @@ function closeDialog(){
   newDiagramValue.value={ label: '', data: 0, color:'#000000' }
 }
 </script>
+<template>
+  <div class="diagram-container">
+    <router-link to="/">Задание 1</router-link>
+    <div class="diagram-header">
+      Круговая диаграмма
+    </div>
+    <div class="diagram-content">
+      <div class="list-container">
+        <div class="list-wrapper">
+          <div
+            v-for="(item, index) in diagramList"
+            :key="index"
+            class="list-item"
+          >
+            <div class="list-label">{{ item.label }}</div>
+            <div class="list-value">{{ item.data }}</div>
+            <div class="list-color">
+              <svg width="30" viewBox="0 0 25 25" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="10" cy="12.5" r="9" :fill="item.color" />
+              </svg>
+              <div>
+                <button class="icon-button" @click="openEditDialog(index)"><svg width="25" height="25" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M12 20H20.5M18 10L21 7L17 3L14 6M18 10L8 20H4V16L14 6M18 10L14 6" stroke="#213547" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg></button>
+                <button class="icon-button" @click="deleteItem(index)"><svg width="25" height="25" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M4 7H20" stroke="#213547" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M6 7V18C6 19.6569 7.34315 21 9 21H15C16.6569 21 18 19.6569 18 18V7" stroke="#213547" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M9 5C9 3.89543 9.89543 3 11 3H13C14.1046 3 15 3.89543 15 5V7H9V5Z" stroke="#213547" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg></button>
+              </div>
+            </div>
+          </div>
+          <button class="button-primary" @click="openAddDialog()">
+            Добавить сектор
+          </button>
+        </div>
+      </div>
+
+      <div class="chart-container">
+        <PieChart :chartData="chartData" :options="chartOptions" :width="400" :height="400" />
+      </div>
+        <!-- Диалог -->
+      <div v-if="dialogVisible" class="dialog-overlay" @mousedown="closeDialog()">
+        <div class="dialog" @mousedown.stop @mouseup.stop>
+          <h3>{{dialogData.header}}</h3>
+
+          <div class="form-group">
+            <input v-model="newDiagramValue.label" type="text" placeholder=" " />
+            <label>Название</label>
+          </div>
+
+          <div class="form-group">
+            <input v-model.number="newDiagramValue.data" type="number" placeholder=" " />
+            <label>Значение</label>
+          </div>
+
+          <div class="form-group-color">
+            <label>Цвет</label>
+            <input v-model="newDiagramValue.color" type="color" />
+          </div>
+
+          <div class="dialog-actions">
+            <button class="button-primary" @click="submitSector">{{dialogData.buttonText}}</button>
+          </div>
+        </div>
+      </div> 
+    </div>
+  </div>
+</template>
 
 <style scoped lang="scss">
 .button-primary {

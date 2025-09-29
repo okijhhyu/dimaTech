@@ -1,3 +1,57 @@
+
+<script setup lang="ts">
+import { computed, watch, ref, type PropType } from 'vue'
+
+const props = defineProps({
+  size: { type: Number, default: 150 },
+  fontSize: { type: Number, default: 20 },
+  max: { type: Number, default: 100 },
+  value: { type: Number, default: 0 },
+  strokeWidth: { type: Number, default: 8 },
+  type: { type: String as PropType<'progressBar' | 'dashboard'>, default: 'progressBar' },
+  fill: { type: String, default: '#fff' },
+  trackColor: { type: String, default: '#eee' },
+  progressColor: { type: String, default: '#409EFF' },
+  textColor: { type: String, default: '#909399' },
+  showLabel: { type: Boolean, default: true },
+  labelType: { type: String as PropType<'progress' | 'success' | 'warning' | 'error'>, default: 'progress' },
+  strokeType: { type: String as PropType<'round' | 'butt'>, default: 'round' },
+  changeColor: {type: Array as PropType<{color:string,value:number}[]>, default: []}
+})
+
+const isAnimating = ref(false)
+
+const center = computed(() => props.size / 2)
+const radius = computed(() => center.value - props.strokeWidth / 2)
+const circumference = computed(() => 2 * Math.PI * radius.value)
+
+const displayPercentage = computed(() => Math.round((props.value / props.max) * 100))
+const progressCoef = computed(() => props.type === 'dashboard' ? 0.75 : 1)
+
+const dashOffset = ref(circumference.value * (1 - props.value / props.max * progressCoef.value))
+const circleTransform = computed(() => props.type === 'dashboard' ? `rotate(-225 ${center.value} ${center.value})` : `rotate(-90 ${center.value} ${center.value})`)
+const dashArray = computed(() => (circumference.value * progressCoef.value))
+const currentColor = computed(() => {
+  const sorted = props.changeColor.sort((a, b) => a.value - b.value);
+  for (let i = 0; i < sorted.length; i++) {
+    if (Math.round((props.value / props.max) * 100) <= sorted[i].value) {
+      return sorted[i].color;
+    }
+  }
+  return sorted[sorted.length - 1].color; // если выше всех порогов
+});
+
+watch([() => props.type, () => props.value], () => {
+  isAnimating.value = true
+  dashOffset.value = circumference.value * (1 - props.value / props.max * progressCoef.value)
+})
+
+watch([() => props.size, () => props.strokeWidth], () => {
+  isAnimating.value = false
+  dashOffset.value = circumference.value * (1 - props.value / props.max * progressCoef.value)
+})
+
+</script>
 <template>
   <div class="progress-wrapper">
     <svg :width="size" :height="size" :viewBox="`0 0 ${size} ${size}`">
@@ -53,60 +107,6 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-import { computed, watch, ref, type PropType } from 'vue'
-
-const props = defineProps({
-  size: { type: Number, default: 150 },
-  fontSize: { type: Number, default: 20 },
-  max: { type: Number, default: 100 },
-  value: { type: Number, default: 0 },
-  strokeWidth: { type: Number, default: 8 },
-  type: { type: String as PropType<'progressBar' | 'dashboard'>, default: 'progressBar' },
-  fill: { type: String, default: '#fff' },
-  trackColor: { type: String, default: '#eee' },
-  progressColor: { type: String, default: '#409EFF' },
-  textColor: { type: String, default: '#909399' },
-  showLabel: { type: Boolean, default: true },
-  labelType: { type: String as PropType<'progress' | 'success' | 'warning' | 'error'>, default: 'progress' },
-  strokeType: { type: String as PropType<'round' | 'butt'>, default: 'round' },
-  changeColor: {type: Array as PropType<{color:string,value:number}[]>, default: []}
-})
-
-const isAnimating = ref(false)
-
-const center = computed(() => props.size / 2)
-const radius = computed(() => center.value - props.strokeWidth / 2)
-const circumference = computed(() => 2 * Math.PI * radius.value)
-
-const displayPercentage = computed(() => Math.round((props.value / props.max) * 100))
-const progressCoef = computed(() => props.type === 'dashboard' ? 0.75 : 1)
-
-const dashOffset = ref(circumference.value * (1 - props.value / props.max * progressCoef.value))
-const circleTransform = computed(() => props.type === 'dashboard' ? `rotate(-225 ${center.value} ${center.value})` : `rotate(-90 ${center.value} ${center.value})`)
-const dashArray = computed(() => (circumference.value * progressCoef.value))
-const currentColor = computed(() => {
-  const sorted = props.changeColor.sort((a, b) => a.value - b.value);
-  for (let i = 0; i < sorted.length; i++) {
-    if (Math.round((props.value / props.max) * 100) <= sorted[i].value) {
-      return sorted[i].color;
-    }
-  }
-  return sorted[sorted.length - 1].color; // если выше всех порогов
-});
-
-watch([() => props.type, () => props.value], () => {
-  isAnimating.value = true
-  dashOffset.value = circumference.value * (1 - props.value / props.max * progressCoef.value)
-})
-
-watch([() => props.size, () => props.strokeWidth], () => {
-  isAnimating.value = false
-  dashOffset.value = circumference.value * (1 - props.value / props.max * progressCoef.value)
-})
-
-</script>
 
 <style scoped lang="scss">
 .progress-wrapper {
