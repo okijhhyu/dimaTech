@@ -5,7 +5,7 @@ This template should help get you started developing with Vue 3 and TypeScript i
 Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
 
 # Клонирование репозитория
-git clone https://github.com/username/project.git
+git clone [https://github.com/okijhhyu/dimaTech.git](https://github.com/okijhhyu/dimaTech.git)
 
 # Установка зависимостей
 npm install
@@ -21,7 +21,7 @@ npm run dev
 Отображает обзор проекта, содержит панель с диаграммами и управление секторами.
 
 **Основные компоненты:**
-- `DiagramContainer` — контейнер для диаграммы и списка секторов.
+- `ProgressBar.vue` — контейнер для диаграммы.
 
 ---
 
@@ -48,6 +48,7 @@ npm run dev
 - **ProgressBar.vue**  
   Отвечает за отображение диаграммы.  
   **Props:**  
+  
 | Prop         | Тип                                                                 | По умолчанию      | Описание                                                                |
 |--------------|---------------------------------------------------------------------|-------------------|-------------------------------------------------------------------------|
 | `size`       | `Number`                                                            | `150`             | Диаметр диаграммы в пикселях                                            |
